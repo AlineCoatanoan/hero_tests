@@ -27,7 +27,7 @@ test("quetes aléatoires", async ({ page }) => {
         await route.fulfill({
             status: 200,
             json: {
-                morts: [],
+                morts: ["Artur", "Lancelot"],
                 name: "La quête du Graal",
                 gain: 500
             }
@@ -38,6 +38,8 @@ test("quetes aléatoires", async ({ page }) => {
 
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("Artur")).toBeVisible();
+    await expect(dialog.getByText("Lancelot")).toBeVisible();
     await expect(dialog.getByText("La quête du Graal")).toBeVisible();
     await expect(dialog.getByText("500")).toBeVisible();
 
