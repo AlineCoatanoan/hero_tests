@@ -1,31 +1,14 @@
 import { test, expect } from "@playwright/test";
-import { data } from "../data/data.js";
+import { loginFunction } from "./utils/login.js";
 
-test.beforeEach(async ({ page }) => {
-    await fetch("http://localhost:8080/api/_reset", { method: "DELETE" });
-
-    await page.goto("http://localhost:8080/landing-page");
-
-    const headerLocator = page.getByRole("heading", {
-        name : "Bienvenue aventurier !",
-    });
-
-    await expect(headerLocator).toBeVisible();
-
-    await page.getByLabel("Choisissez un nom").fill("devquest");
-        const buttonValidate = page.getByRole("button", {
-            name : "Commencer l'aventure !",
-        });
-    await expect(buttonValidate).toBeVisible();
-    await buttonValidate.click();
-
-    await expect(page).toHaveURL("http://localhost:8080/");
+test("titre hero manager visible", async ({ page }) => {
+    await loginFunction(page);
     await expect(page.getByRole("heading", { name : "Hero manager" })).toBeVisible();
 });
 
 
 test("créer une équipe et recruter un héros", async ({ page }) => {
-
+    await loginFunction(page);
     //créer ton équipe
     await page.getByRole('link', { name: 'Crée ton équipe !' }).click();
 
