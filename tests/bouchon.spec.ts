@@ -21,8 +21,24 @@ test("quetes aléatoires", async ({ page }) => {
     }
     await page.getByRole('button', { name: 'Créer le groupe' }).click();
 
-    await expect(page).toHaveURL("http://localhost:8080/");
+  
 
-    await page.getByRole('button', { name: 'Commencer' }).first().click();
+    await page.route("http://localhost:8080/api/quetes/*/_commencer", async (route) => {
+        await route.fulfill({
+            status: 200,
+            json: {
+                morts: [],
+                name: "La quête du Graal",
+                gain: 500
+            }
+        });
+    });
+
+      await page.getByRole('button', { name: 'Commencer' }).first().click();
+
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("La quête du Graal")).toBeVisible();
+    await expect(dialog.getByText("500")).toBeVisible();
 
 });
